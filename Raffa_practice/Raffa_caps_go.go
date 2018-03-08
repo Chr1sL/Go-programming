@@ -1,5 +1,5 @@
 package main
-// this is the capitalization corrector it doesn't know waht to do with  punctiation tho
+// this is the capitalization corrector it doesn't know waht to do with  punctiation tho :(
 import "fmt"
 import "os"
 import "bufio"

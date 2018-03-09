@@ -1,6 +1,6 @@
 package main
 
-// this is the capitalization corrector it doesn't know what to do with  punctiation tho :(
+// this is the capitalization corrector it only know periods tho no other puncuation
 import "fmt"
 import "os"
 import "bufio"
@@ -11,10 +11,16 @@ func main() {
 	fmt.Print("Enter text: ")
 	text, _ := reader.ReadString('\n')
 	//^^^  https://stackoverflow.com/questions/20895552/how-to-read-input-from-console-line
-	text_a := s.Split(text, ".")
 	// fmt.Println(make_caps(text))
+	text_a := s.Split(text, ". ")
+	out_a := []string{}
 
-	fmt.Print(make_caps(text))
+	for _, p := range text_a {
+		part := make_caps(p)
+		out_a = append(out_a, part)
+	}
+	out_st := s.Join(out_a, ". ")
+	fmt.Print(out_st)
 }
 
 func make_caps(str string) string {

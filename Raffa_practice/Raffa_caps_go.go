@@ -11,7 +11,10 @@ func main() {
 	fmt.Print("Enter text: ")
 	text, _ := reader.ReadString('\n')
 	//^^^  https://stackoverflow.com/questions/20895552/how-to-read-input-from-console-line
-	fmt.Println(make_caps(text))
+	text_a := s.Split(text, ".")
+	// fmt.Println(make_caps(text))
+
+	fmt.Print(make_caps(text))
 }
 
 func make_caps(str string) string {

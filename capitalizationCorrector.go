@@ -9,7 +9,7 @@ import (
 
 //this function fixes the capitalization of strings
 func main() {
-    //gets input from user
+	//gets input from user: https://stackoverflow.com/questions/20895552/how-to-read-input-from-console-line
     reader := bufio.NewReader(os.Stdin)
     fmt.Print("Enter text to manipulate: ")
     text, _ := reader.ReadString('\n')

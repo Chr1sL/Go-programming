@@ -1,10 +1,11 @@
 package main
 
-import(
-  "fmt"
-  "io/ioutil"
+// I'm somewhat following the tutorial from the  link in the readme
+import (
+	"fmt"
+	// "io/ioutil"
 )
 
-func main(){
-
+func main() {
+	fmt.Print("This file works\n")
 }

@@ -1,10 +1,12 @@
 package main
 
 // this is the capitalization corrector it only know periods tho no other puncuation
-import "fmt"
-import "os"
-import "bufio"
-import s "strings"
+import (
+	"bufio"
+	"fmt"
+	"os"
+	s "strings"
+)
 
 func main() {
 	reader := bufio.NewReader(os.Stdin)

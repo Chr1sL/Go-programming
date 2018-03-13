@@ -7,5 +7,7 @@ General structure options:
  2. we can try to have it that go does server sides stuff (error handling,  getting information, saving, and sending) and then JS and css handles the looks sending stuff to the go files [I'm thinking of having an intermediary file where the JS saves the inputed information, and then go finds it and passes the information on to molly and the teacher involved ] 
  
  https://golang.org/pkg/net/smtp/  << that is a link to help with automatic email sending.
+ 
+ https://stackoverflow.com/questions/23282311/parse-input-from-html-form-in-golang << will help us when we need to be able to get the data from the forms to send along
 
 just a note: once we finish the code we will need a server to to host the page but we can ask the school or something we'll cross that bridge when we get to its

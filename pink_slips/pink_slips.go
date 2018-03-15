@@ -24,3 +24,6 @@ type email struct {
 }
 
 // that ^^^ is a struct (object/ dictionary) for all the data from the form to go to {and it works}
+
+// func get_info() struct {
+// }

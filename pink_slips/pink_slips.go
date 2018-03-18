@@ -1,18 +1,24 @@
 package main
 
-// I'm somewhat following the tutorial from the  link in the readme
 import (
 	"fmt"
 	"io/ioutil"
+	"os"
 )
+
+// I'm somewhat following the tutorial from the  link in the readme
 
 func main() {
 	us := "pink.slips@lwhs.org"
-	test_mail := email{us, "some_teacher@lwhs.org", "student@gmail.com", "3/14/18", "1:30", "COMPUTING 2"}
-	teacher_p := &Page{"s_2_t_Title", []byte(test_mail.evt_date + "\n"+  test_mail.from_addr + "\n"+  test_mail.prof_addr + "\n"+  test_mail.skp_class + "\n"+  test_mail.time)} // bage being prepped for saving here is what the student has submitted and the teacher will be seeing
+	test_mail := email{us, "some_teacher@lwhs.org", "sporty.student@gmail.com", "3/14/18", "12:40", "COMPUTING 2"}
+	title := "ok_test" // this for testing and will be needed later
+	teacher_p := &Page{title, []byte(title + "\n" + test_mail.evt_date + "\n"+  test_mail.from_addr + "\n"+  test_mail.prof_addr + "\n"+  test_mail.skp_class + "\n"+  test_mail.time)} // page being prepped for saving here is what the student has submitted and the teacher will be seeing
 	teacher_p.save() // this saves
 	teacher_p2, _ := loadPage(teacher_p.Title)
-	fmt.Print(string(teacher_p2.Body), "\n--SUCCESS--\n")// keep --SUCCESS-- AT THE END
+	fmt.Print(string(teacher_p2.Body))
+	reset(teacher_p.Title) // deletes the relevant files eventually should be put  in if statement or another  function
+	fmt.Print("\n--SUCCESS--\n")
+	// keep --SUCCESS-- AT THE END
 }
 
 type email struct {
@@ -45,4 +51,10 @@ func loadPage(title string) (*Page, error) {
 		return nil, err
 	}
 	return &Page{Title: title, Body: body}, nil
+}
+
+func reset(group string)  error { // this function will delete resolved stuff so after the teacher says yes or no it is resolved and all related docs are purged||| also "group" is just the naming strategy i was thinking of, like teacher name + student name or sm
+	file1 := group + ".txt"
+	//file2 := group + ".html" //this is the page that is created when the student submits and that the teacher sees
+	return os.Remove(file1) // os.Remove(file2) // does the removal
 }

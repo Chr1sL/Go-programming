@@ -10,27 +10,31 @@ import (
 
 func main() {
 	us := "pink.slips@lwhs.org"
-	test_mail := email{us, "some_teacher@lwhs.org", "sporty.student@gmail.com", "3/14/18", "12:40", "COMPUTING 2"}
+	st_data := student_data{us, "some_teacher@lwhs.org", "sporty.student@gmail.com", "3/14/18", "12:40", "COMPUTING 2", "teacher+student+time.now"}
 	title := "ok_test" // this for testing and will be needed later
-	teacher_p := &Page{title, []byte(title + "\n" + test_mail.evt_date + "\n"+  test_mail.from_addr + "\n"+  test_mail.prof_addr + "\n"+  test_mail.skp_class + "\n"+  test_mail.time)} // page being prepped for saving here is what the student has submitted and the teacher will be seeing
+	teacher_p := &Page{title, []byte(title + "\n" + st_data.evt_date + "\n"+  st_data.from_addr + "\n"+  st_data.prof_addr + "\n"+  st_data.skp_class + "\n"+  st_data.time + "\n" + st_data.grp_name)} // page being prepped for saving here is what the student has submitted and the teacher will be seeing
 	teacher_p.save() // this saves
 	teacher_p2, _ := loadPage(teacher_p.Title)
+	defer reset(teacher_p.Title) // deletes the relevant files eventually should be put  in if statement or another  function ||| defer forces reset() to happen the end of the program
 	fmt.Print(string(teacher_p2.Body))
-	reset(teacher_p.Title) // deletes the relevant files eventually should be put  in if statement or another  function
 	fmt.Print("\n--SUCCESS--\n")
 	// keep --SUCCESS-- AT THE END
 }
 
-type email struct {
-	from_addr string // this is from us we can figure that later
+type student_data struct {
+	from_addr string // this is from us we can figure that later also is a place holder will be deleted
 	prof_addr string // this for the teacher molly is a constant
 	stdt_addr string // student email address
 	evt_date  string // date of the event
 	time      string //? idk if this should be a string
 	skp_class string // the  class being skipped
+	grp_name  string
 }
 
-// that ^^^ is a struct (object/ dictionary) for all the data from the form to go to {and it works}
+// that ^^^ is a struct (object/ dictionary) for all the data from the form to go to [and it works]
+
+// add interface here??
+
 
 // func get_info() struct {
 //}

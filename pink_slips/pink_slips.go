@@ -17,23 +17,30 @@ func main() {
 	teacher_p2, _ := loadPage(teacher_p.Title)
 	defer reset(teacher_p.Title) // deletes the relevant files eventually should be put  in if statement or another  function ||| defer forces reset() to happen the end of the program
 	fmt.Print(string(teacher_p2.Body))
+	fmt.Print("\n", st_data)
 	fmt.Print("\n--SUCCESS--\n")
 	// keep --SUCCESS-- AT THE END
 }
 
-type student_data struct {
+type student_data struct { // change to an interface with functions to get this stuff vvv
 	from_addr string // this is from us we can figure that later also is a place holder will be deleted
 	prof_addr string // this for the teacher molly is a constant
 	stdt_addr string // student email address
 	evt_date  string // date of the event
 	time      string //? idk if this should be a string
 	skp_class string // the  class being skipped
-	grp_name  string
+	grp_name  string // teacherName+studentName+time.now
 }
 
 // that ^^^ is a struct (object/ dictionary) for all the data from the form to go to [and it works]
-
-// add interface here??
+//type data interface { // this interface makes the struct above
+//	get_st_addr() string
+//	get_prof_addr() string
+//	get_evt_date() string
+//	get_time() string //? maybe not a string?
+//	get_class() string
+//	mk_group() string
+//} // none of the functions in the interface are defined yet so it won't work (which is why is commented)
 
 
 // func get_info() struct {

@@ -13,7 +13,7 @@ func main() {
 	us := "pink.slips@lwhs.org"
 	st_data := student_data{us, "some_teacher@lwhs.org", "sporty.student@gmail.com", "3/14/18", "12:40", "COMPUTING 2", "teacher+student+time.now"}
 	title := "ok_test" // this for testing and will be needed later
-	teacher_p := &Page{title, []byte(title + "\n" + st_data.evt_date + "\n"+  st_data.from_addr + "\n"+  st_data.prof_addr + "\n"+  st_data.skp_class + "\n"+  st_data.time + "\n" + st_data.grp_name)} // page being prepped for saving here is what the student has submitted and the teacher will be seeing
+	teacher_p := &Page{title, []byte(title + "\n" + st_data.evt_date + "\n"+  st_data.from_addr + "\n"+  st_data.prof_addr + "\n"+  st_data.skp_class + "\n"+  st_data.n_time + "\n" + st_data.grp_name)} // page being prepped for saving here is what the student has submitted and the teacher will be seeing
 	teacher_p.save() // this saves
 	teacher_p2, _ := loadPage(teacher_p.Title)
 	defer reset(teacher_p.Title) // deletes the relevant files eventually should be put  in if statement or another  function ||| defer forces reset() to happen the end of the program

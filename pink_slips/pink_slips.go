@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"time"
 )
 
 // I'm somewhat following the tutorial from the  link in the readme
@@ -27,24 +28,31 @@ type student_data struct { // change to an interface with functions to get this 
 	prof_addr string // this for the teacher molly is a constant
 	stdt_addr string // student email address
 	evt_date  string // date of the event
-	time      string //? idk if this should be a string
+	n_time      string //? idk if this should be a string
 	skp_class string // the  class being skipped
 	grp_name  string // teacherName+studentName+time.now
 }
 
 // that ^^^ is a struct (object/ dictionary) for all the data from the form to go to [and it works]
-//type data interface { // this interface makes the struct above
+type data interface { // this interface makes the struct above will
 //	get_st_addr() string
 //	get_prof_addr() string
 //	get_evt_date() string
 //	get_time() string //? maybe not a string?
 //	get_class() string
-//	mk_group() string
-//} // none of the functions in the interface are defined yet so it won't work (which is why is commented)
+	mk_group() string // this one should be working
+} // none of the functions in the interface are defined yet so it won't work (which is why is commented)
 
+type group_name struct {
+	prof_name, st_name string
+}
+func (g group_name) mk_group() string {
+	pn := g.prof_name
+	sn := g.st_name
+	t := time.Now()
+	return pn + sn + t.String()
+}
 
-// func get_info() struct {
-//}
 type Page struct { // more or less constructor for pages in general?
 	Title string
 	Body  []byte

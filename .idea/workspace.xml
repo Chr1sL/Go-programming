@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="963b9983-d506-4c11-8594-96f08f3802ba" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/pink_slips/pink_slips.go" afterPath="$PROJECT_DIR$/pink_slips/pink_slips.go" />
-      <change beforePath="$PROJECT_DIR$/pink_slips/pink_slips.html" afterPath="$PROJECT_DIR$/pink_slips/pink_slips.html" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -14,11 +13,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="pink_slips.go" pinned="false" current-in-tab="false">
+      <file leaf-file-name="pink_slips.go" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/pink_slips/pink_slips.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="218">
-              <caret line="26" column="7" lean-forward="false" selection-start-line="26" selection-start-column="7" selection-end-line="26" selection-end-column="7" />
+            <state relative-caret-position="56">
+              <caret line="38" column="24" lean-forward="true" selection-start-line="38" selection-start-column="24" selection-end-line="38" selection-end-column="24" />
               <folding>
                 <element signature="e#14#58#0" expanded="true" />
               </folding>
@@ -26,7 +25,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="pink_slips.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="pink_slips.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pink_slips/pink_slips.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="0">
@@ -53,8 +52,8 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/pink_slips/pink_slips.go" />
         <option value="$PROJECT_DIR$/pink_slips/pink_slips.html" />
+        <option value="$PROJECT_DIR$/pink_slips/pink_slips.go" />
       </list>
     </option>
   </component>
@@ -206,21 +205,21 @@
     <entry file="file://$PROJECT_DIR$/pink_slips/s_2_t_Title.txt" />
     <entry file="file://$PROJECT_DIR$/pink_slips/teacher_Test_Title.txt" />
     <entry file="file://$PROJECT_DIR$/pink_slips/data/data.json" />
-    <entry file="file://$PROJECT_DIR$/pink_slips/pink_slips.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="218">
-          <caret line="26" column="7" lean-forward="false" selection-start-line="26" selection-start-column="7" selection-end-line="26" selection-end-column="7" />
-          <folding>
-            <element signature="e#14#58#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pink_slips/pink_slips.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pink_slips/pink_slips.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="56">
+          <caret line="38" column="24" lean-forward="true" selection-start-line="38" selection-start-column="24" selection-end-line="38" selection-end-column="24" />
+          <folding>
+            <element signature="e#14#58#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

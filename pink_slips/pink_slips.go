@@ -53,9 +53,9 @@ func (g group_name) mk_group() string {
 	return pn + sn + t.String()
 }
 
-func mk_data(d data) interface{}{
+func mk_data(d data) (interface{}, interface{}){
 	grp := d.mk_group()
-	return grp
+	return grp, 0
 }
 
 type Page struct { // more or less constructor for pages in general?

@@ -9,16 +9,17 @@
   <body>
     <header>
     <h1>Pink Slips Form</h1>
+    <h3>To submit, ALL boxes MUST be filled</h3>
   </header>
     <form action="http://127.0.0.1:8080/data?name=&grade=&team=&date=&agree=&block=&class=&t_email=&s_email=&t_date=&thread=123" method="post" enctype="application/x-www-form-urlencoded">
       <table>
         <tr>
           <td>Full name: </td>
-          <td><input type = "text" name = "name"/></td>
+          <td><input type = "text" name = "name" required/></td>
         </tr>
         <tr>
           <td>Grade: </td>
-          <td><select name = "grade">
+          <td><select name = "grade" required>
           <option value="9">9</option>
           <option value="10">10</option>
           <option value="11">11</option>
@@ -27,18 +28,18 @@
         </tr>
         <tr>
           <td>Team: </td>
-          <td><input type = "text" name = "team"/></td>
+          <td><input type = "text" name = "team" required/></td>
         </tr>
         <tr>
           <td>Date of Absence: </td>
-          <td><input type = "text" name = "date"/></td>
+          <td><input type = "text" name = "date" required/></td>
         </tr>
         <tr>
           <td>Time leaving: </td>
-          <td><input type = "text" name = "time"/></td>
+          <td><input type = "text" name = "time" required/></td>
         </tr>
         <td>
-          <input type="checkbox" name="agree" value="yes"/>
+          <input type="checkbox" name="agree" value="yes" required/>
         </td>
         <td>By checking this box, I understand that I am responsible for gathering
           assignments and making arragnements to complete any work I miss as a result
@@ -47,7 +48,7 @@
         </td>
         <tr>
           <td>Block: </td>
-          <td><select name = "block">
+          <td><select name = "block" required>
           <option value="A">A</option>
           <option value="B">B</option>
           <option value="C">C</option>
@@ -60,15 +61,15 @@
         </tr>
         <tr>
           <td>Class: </td>
-          <td><input type = "text" name = "class"/></td>
+          <td><input type = "text" name = "class" required/></td>
         </tr>
         <tr>
           <td>Teacher's Email: </td>
-          <td><input type = "text" name = "t_email"/></td>
+          <td><input type = "text" name = "t_email" required/></td>
         </tr>
         <tr>
           <td>Student Email: </td>
-          <td><input type = "text" name = "s_email"/></td>
+          <td><input type = "text" name = "s_email" required/></td>
         </tr>
         <tr>
           <!-- <td>Today's Date: </td> -->

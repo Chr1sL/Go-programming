@@ -14,7 +14,7 @@ import (
 
 func main() {
 	//us := "pink.slips@lwhs.org"
-	names := evt_data{"my.teacher", "me", "teacher@lwhs.org", "st@gmail.com", "now", "this.class"}
+	names := evt_data{, "me", "teacher@lwhs.org", "st@gmail.com", "now", "this.class"}
 	//st_data :=  // student_data{us, "some_teacher@lwhs.org", "sporty.student@gmail.com", "3/14/18", "12:40", "COMPUTING 2", "teacher+student+time.now"}
 	mk_data(names)
 	title := "ok_test" // this for testing and will be needed later

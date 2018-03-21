@@ -10,11 +10,11 @@
     <header>
     <h1>Pink Slips Form</h1>
   </header>
-    <form action="#" method="post">
+    <form action="http://127.0.0.1:8080/data?name=&grade=&team=&date=&agree=&block=&class=&t_email=&s_email=&t_date=&thread=123" method="post" enctype="application/x-www-form-urlencoded">
       <table>
         <tr>
           <td>Full name: </td>
-          <td><input type = "text" name = "first"/></td>
+          <td><input type = "text" name = "name"/></td>
         </tr>
         <tr>
           <td>Grade: </td>
@@ -31,14 +31,14 @@
         </tr>
         <tr>
           <td>Date of Absence: </td>
-          <td><input type = "text" name = "absence"/></td>
+          <td><input type = "text" name = "date"/></td>
         </tr>
         <tr>
           <td>Time leaving: </td>
           <td><input type = "text" name = "time"/></td>
         </tr>
         <td>
-          <input type="checkbox" name="" value="yes"/>
+          <input type="checkbox" name="agree" value="yes"/>
         </td>
         <td>By checking this box, I understand that I am responsible for gathering
           assignments and making arragnements to complete any work I miss as a result
@@ -64,15 +64,16 @@
         </tr>
         <tr>
           <td>Teacher's Email: </td>
-          <td><input type = "text" name = "email"/></td>
+          <td><input type = "text" name = "t_email"/></td>
         </tr>
         <tr>
           <td>Student Email: </td>
-          <td><input type = "text" name = "email"/></td>
+          <td><input type = "text" name = "s_email"/></td>
         </tr>
         <tr>
           <td>Today's Date: </td>
-          <td><input type = "text" name = "date"/></td>
+          <td><input type = "text" name = "t_date"/></td>
+            <td><input type="submit" name="submit"/></td>
         </tr>
     </form>
   </body>

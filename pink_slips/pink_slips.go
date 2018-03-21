@@ -5,36 +5,34 @@ import (
 	"io/ioutil"
 	"os"
 	"time"
+	"net/http"
 )
 
 // I'm somewhat following the tutorial from the  link in the readme
 
 func main() {
 	//us := "pink.slips@lwhs.org"
-	names := group_name{"my.teacher", "me"}
+	names := evt_data{"my.teacher", "me", "teacher@lwhs.org", "st@gmail.com", "now", "this.class"}
 	//st_data :=  // student_data{us, "some_teacher@lwhs.org", "sporty.student@gmail.com", "3/14/18", "12:40", "COMPUTING 2", "teacher+student+time.now"}
 	mk_data(names)
 	title := "ok_test" // this for testing and will be needed later
 	teacher_p := &Page{title, []byte(title)} // page being prepped for saving here is what the student has submitted and the teacher will be seeing
 	teacher_p.save() // this saves
 	teacher_p2, _ := loadPage(teacher_p.Title)
-	defer reset(teacher_p.Title) // deletes the relevant files eventually should be put  in if statement or another  function ||| defer forces reset() to happen the end of the program
+	reset(teacher_p.Title) // deletes the relevant files eventually should be put  in if statement or another  function ||| defer forces reset() to happen the end of the program
 	fmt.Print(string(teacher_p2.Body))
 	fmt.Print("\n--SUCCESS--\n")
 	// keep --SUCCESS-- AT THE END
+	server := http.Server{
+		Addr: "127.0.0.1:8080",
+	}
+	http.HandleFunc("/data", process)
+	server.ListenAndServe()
 }
-
-//type student_data struct { // change to an interface with functions to get this stuff vvv
-//	from_addr string // this is from us we can figure that later also is a place holder will be deleted
-//	prof_addr string // this for the teacher molly is a constant
-//	stdt_addr string // student email address
-//	evt_date  string // date of the event
-//	n_time      string //? idk if this should be a string
-//	skp_class string // the  class being skipped
-//	grp_name  string // teacherName+studentName+time.now
-//}
-
-// that ^^^ is a struct (object/ dictionary) for all the data from the form to go to [and it works]
+func process(w http.ResponseWriter, r *http.Request){
+	r.ParseForm()
+	fmt.Fprintln(w, r.Form)
+}
 type data interface { // this interface makes the struct above will
 //	get_st_addr() string
 //	get_prof_addr() string
@@ -43,19 +41,20 @@ type data interface { // this interface makes the struct above will
 	mk_group() string // this one should be working
 } // none of the functions in the interface are defined yet so it won't work (which is why is commented)
 
-type group_name struct {
-	prof_name, st_name string
+type evt_data struct {
+	prof_name, st_name, prof_addr, st_addr, evt_date, skp_class string
 }
-func (g group_name) mk_group() string {
-	pn := g.prof_name
-	sn := g.st_name
+
+func (e evt_data) mk_group() string {
+	pn := e.prof_name
+	sn := e.st_name
 	t := time.Now()
 	return pn + sn + t.String()
 }
 
-func mk_data(d data) (interface{}, interface{}){
+func mk_data(d data) (interface{}){
 	grp := d.mk_group()
-	return grp, 0
+	return grp
 }
 
 type Page struct { // more or less constructor for pages in general?

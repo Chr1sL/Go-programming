@@ -1,11 +1,13 @@
 package main
-
+// this helped a lot (link)
 import (
 	"fmt"
 	"io/ioutil"
 	"os"
 	"time"
 	"net/http"
+	"net/url"
+	"io"
 )
 
 // I'm somewhat following the tutorial from the  link in the readme
@@ -23,13 +25,13 @@ func main() {
 	fmt.Print(string(teacher_p2.Body))
 	fmt.Print("\n--SUCCESS--\n")
 	// keep --SUCCESS-- AT THE END
-	server := http.Server{
+	server := http.Server{ // makes server
 		Addr: "127.0.0.1:8080",
 	}
-	http.HandleFunc("/data", process)
-	server.ListenAndServe()
+	http.HandleFunc("/data", process) // handles student data
+	server.ListenAndServe() // does the server thing idk
 }
-func process(w http.ResponseWriter, r *http.Request){
+func process(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	fmt.Fprintln(w, r.Form)
 }
@@ -38,6 +40,8 @@ type data interface { // this interface makes the struct above will
 //	get_prof_addr() string
 //	get_evt_date() string
 //	get_class() string
+//	get_grade() string
+//	get_team() string
 	mk_group() string // this one should be working
 } // none of the functions in the interface are defined yet so it won't work (which is why is commented)
 

@@ -2,18 +2,19 @@ package main
 // this helped a lot (link)
 import (
 	"fmt"
+	"html/template"
 	"io/ioutil"
 	"os"
 	"time"
 	"net/http"
-	"crypto/md5"
+	"log"
 )
 
 // I'm somewhat following the tutorial from the  link in the readme
-
+//https://golang.org/doc/articles/wiki/#tmp_6
 func main() {
 	//us := "pink.slips@lwhs.org"
-	names := evt_data{"sfdsf", "me", "teacher@lwhs.org", "st@gmail.com", "now", "this.class"}
+	names := evt_data{"sfdsf" ,"me", "teacher@lwhs.org", "st@gmail.com", "now", "this.class"}
 	//st_data :=  // student_data{us, "some_teacher@lwhs.org", "sporty.student@gmail.com", "3/14/18", "12:40", "COMPUTING 2", "teacher+student+time.now"}
 	mk_data(names)
 	title := "ok_test" // this for testing and will be needed later
@@ -25,27 +26,20 @@ func main() {
 	fmt.Print("\n--SUCCESS--\n")
 	// keep --SUCCESS-- AT THE END
 	server := http.Server{ // makes server
-		Addr: "127.0.0.1",
+		Addr: "127.0.0.1:8080",
 	}
-	http.HandleFunc("/data", process) // handles student data and produces
+	http.HandleFunc("/data", process) // handles student data
 	server.ListenAndServe() // does the server thing idk
-	//http.Handle("/", http.FileServer(http.Dir("./static")))
-	//http.ListenAndServe(":3000", nil)
-	//http.Handle("/", http.FileServer(http.Dir("./index.html")))
-	//http.ListenAndServe(":3001", nil)
+
+	http.HandleFunc("/view/", viewHandler)
+	http.HandleFunc("/edit/", editHandler)
+	//http.HandleFunc("/save/", saveHandler)
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
+
 func process(w http.ResponseWriter, r *http.Request) {
-	sbmt_data := evt_data{r.FormValue("t_name"),r.FormValue("name"), r.FormValue("t_email"), r.FormValue("s_email"), r.FormValue("date"), r.FormValue("class")}
-	
-	t := sbmt_data.prof_name + sbmt_data.st_name + time.Now().String() // this for testing and will be needed later
-	title, _ := md5.New().Write([]byte(t)) // makes password for teacher and makes title for related files
-	teacher_p := &Page{string(title), []byte(sbmt_data.prof_name + "\n" + sbmt_data.prof_addr + "\n" + sbmt_data.st_name + "\n" + sbmt_data.st_addr + "\n" + sbmt_data.skp_class + "\n" + sbmt_data.evt_date) } // page being prepped for saving here is what the student has submitted and the teacher will be seeing
-	teacher_p.save() // this save
-	//teacher_p2, _ := loadPage(teacher_p.Title)
-	//reset(teacher_p.Title) // deletes the relevant files eventually should be put  in if statement or another  function ||| defer forces reset() to happen the end of the program
-	
-	//fmt.Print(sbmt_data.st_name, sbmt_data.evt_date)
-	fmt.Fprintf(w, "You have successfully submitted your request!")
+	r.ParseForm()
+	fmt.Fprintln(w, r.Form)
 }
 type data interface { // this interface makes the struct above will
 //	get_st_addr() string
@@ -97,3 +91,26 @@ func reset(group string)  error { // this function will delete resolved stuff so
 	//file2 := group + ".html" //this is the page that is created when the student submits and that the teacher sees
 	return os.Remove(file1) // os.Remove(file2) // does the removal
 }
+
+//https://golang.org/doc/articles/wiki/#tmp_6
+//https://golang.org/doc/articles/wiki/part3.go?m=text
+func renderTemplate(w http.ResponseWriter, tmpl string, p *Page) {
+	t, _ := template.ParseFiles(tmpl + ".html")
+	t.Execute(w, p)
+}
+
+func viewHandler(w http.ResponseWriter, r *http.Request) {
+	title := r.URL.Path[len("/view/"):]
+	p, _ := loadPage(title)
+	renderTemplate(w, "view", p)
+}
+
+func editHandler(w http.ResponseWriter, r *http.Request) {
+	title := r.URL.Path[len("/edit/"):]
+	p, err := loadPage(title)
+	if err != nil {
+		p = &Page{Title: title}
+	}
+	renderTemplate(w, "edit", p)
+}
+

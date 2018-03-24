@@ -11,7 +11,8 @@
     <h1>Pink Slips Form</h1>
     <h3>To submit, ALL boxes MUST be filled</h3>
   </header>
-    <form action="http://127.0.0.1:8080/data?name=&grade=&team=&date=&agree=&block=&class=&t_email=&s_email=&t_name=&thread=123" method="post" enctype="application/x-www-form-urlencoded">
+    <!-- keep http:// in the base url this now just needs a domain name!
+    <form action="http://10.1.9.191:8080/data?name=&grade=&team=&date=&agree=&block=&class=&t_email=&s_email=&t_name=&thread=123" method="post" enctype="application/x-www-form-urlencoded">
       <table>
         <tr>
           <td>Full name: </td>
@@ -80,6 +81,7 @@
           <!-- <td><input type = "text" name = "t_date"/></td> we can just use time.Now() when they hit submit -->
             <td><input type="submit" name="submit"/></td>
         </tr>
+      </table>
     </form>
   </body>
 </html>

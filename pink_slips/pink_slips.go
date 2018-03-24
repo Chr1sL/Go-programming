@@ -8,25 +8,24 @@ import (
 	"time"
 	"net/http"
 	"log"
+	"crypto/md5"
 )
 
 // I'm somewhat following the tutorial from the  link in the readme
 //https://golang.org/doc/articles/wiki/#tmp_6
 func main() {
 	//us := "pink.slips@lwhs.org"
-	names := evt_data{"sfdsf" ,"me", "teacher@lwhs.org", "st@gmail.com", "now", "this.class"}
 	//st_data :=  // student_data{us, "some_teacher@lwhs.org", "sporty.student@gmail.com", "3/14/18", "12:40", "COMPUTING 2", "teacher+student+time.now"}
-	mk_data(names)
-	title := "ok_test" // this for testing and will be needed later
-	teacher_p := &Page{title, []byte(title)} // page being prepped for saving here is what the student has submitted and the teacher will be seeing
-	teacher_p.save() // this saves
-	teacher_p2, _ := loadPage(teacher_p.Title)
-	reset(teacher_p.Title) // deletes the relevant files eventually should be put  in if statement or another  function ||| defer forces reset() to happen the end of the program
-	fmt.Print(string(teacher_p2.Body))
+	//title := "ok_test" // this for testing and will be needed later
+	//teacher_p := &Page{title, []byte(title)} // page being prepped for saving here is what the student has submitted and the teacher will be seeing
+	//teacher_p.save() // this saves
+	//teacher_p2, _ := loadPage(teacher_p.Title)
+	//reset(teacher_p.Title) // deletes the relevant files eventually should be put  in if statement or another  function ||| defer forces reset() to happen the end of the program
+	//fmt.Print(string(teacher_p2.Body))
 	fmt.Print("\n--SUCCESS--\n")
 	// keep --SUCCESS-- AT THE END
 	server := http.Server{ // makes server
-		Addr: "127.0.0.1:8080",
+		Addr: ":8080",
 	}
 	http.HandleFunc("/data", process) // handles student data
 	server.ListenAndServe() // does the server thing idk
@@ -38,34 +37,25 @@ func main() {
 }
 
 func process(w http.ResponseWriter, r *http.Request) {
-	r.ParseForm()
-	fmt.Fprintln(w, r.Form)
+	sbmt_data := evt_data{r.FormValue("t_name"),r.FormValue("name"), r.FormValue("t_email"), r.FormValue("s_email"), r.FormValue("date"), r.FormValue("class"), r.FormValue("block"), r.FormValue("time")}
+
+	t := sbmt_data.prof_name + sbmt_data.st_name + time.Now().String() // this for testing and will be needed later
+	t2 := md5.New()
+	t2.Write([]byte(t))
+	title := t2.Sum(nil)// makes password for teacher and makes title for related files
+	st_data := &Page{string(title), []byte(sbmt_data.prof_name + "\n" + sbmt_data.prof_addr + "\n" + sbmt_data.st_name + "\n" + sbmt_data.st_addr + "\n" + sbmt_data.skp_class + sbmt_data.class_block+ "\n" + sbmt_data.evt_date + "\n" + sbmt_data.out_time)} // page being prepped for saving here is what the student has submitted and the teacher will be seeing
+	st_data.save() // this save
+	//teacher_p2, _ := loadPage(teacher_p.Title)
+	//reset(teacher_p.Title) // deletes the relevant files eventually should be put  in if statement or another  function ||| defer forces reset() to happen the end of the program
+	log.Printf("\n %x\n %s", title, st_data.Body)
+	//fmt.Print(sbmt_data.st_name, sbmt_data.evt_date)
+	fmt.Fprintf(w, "You have successfully submitted your request!")
 }
-type data interface { // this interface makes the struct above will
-//	get_st_addr() string
-//	get_prof_addr() string
-//	get_evt_date() string
-//	get_class() string
-//	get_grade() string
-//	get_team() string
-	mk_group() string // this one should be working
-} // none of the functions in the interface are defined yet so it won't work (which is why is commented)
 
 type evt_data struct {
-	prof_name, st_name, prof_addr, st_addr, evt_date, skp_class string
+	prof_name, st_name, prof_addr, st_addr, evt_date, skp_class, class_block, out_time string
 }
 
-func (e evt_data) mk_group() string {
-	pn := e.prof_name
-	sn := e.st_name
-	t := time.Now()
-	return pn + sn + t.String()
-}
-
-func mk_data(d data) (interface{}){
-	grp := d.mk_group()
-	return grp
-}
 
 type Page struct { // more or less constructor for pages in general?
 	Title string
@@ -74,7 +64,7 @@ type Page struct { // more or less constructor for pages in general?
 
 func (p *Page) save() error { //no input but creates a file idk i coppied lol
 	filename := p.Title + ".txt"                    //info stored in txt
-	return ioutil.WriteFile(filename, p.Body, 0600) // makes the txt file
+	return ioutil.WriteFile("/data/"+filename, p.Body, 0600) // makes the txt file
 }
 
 func loadPage(title string) (*Page, error) {
@@ -113,4 +103,3 @@ func editHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	renderTemplate(w, "edit", p)
 }
-

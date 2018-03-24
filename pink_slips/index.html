@@ -11,9 +11,9 @@
     <h1>Pink Slips Form</h1>
     <h3>To submit, ALL boxes MUST be filled</h3>
   </header>
-    <!-- keep http:// in the base url this now just needs a domain name!
+    <!-- keep http:// in the base url this now just needs a domain name! -->
     <form action="http://10.1.9.191:8080/data?name=&grade=&team=&date=&agree=&block=&class=&t_email=&s_email=&t_name=&thread=123" method="post" enctype="application/x-www-form-urlencoded">
-      <table>
+      <table id="table">
         <tr>
           <td>Full name: </td>
           <td><input type = "text" name = "name" required/></td>
@@ -25,6 +25,7 @@
         <tr>
           <td>Grade: </td>
           <td><select name = "grade" required>
+	<option>--select--</option>
           <option value="9">9</option>
           <option value="10">10</option>
           <option value="11">11</option>
@@ -54,6 +55,7 @@
         <tr>
           <td>Block: </td>
           <td><select name = "block" required>
+	<option>--select--</option>
           <option value="A">A</option>
           <option value="B">B</option>
           <option value="C">C</option>

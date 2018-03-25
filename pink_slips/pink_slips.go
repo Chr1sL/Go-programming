@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"log"
 	"crypto/md5"
+	"path/filepath"
 )
 
 // I'm somewhat following the tutorial from the  link in the readme
@@ -27,6 +28,11 @@ func main() {
 	http.HandleFunc("/edit/", editHandler)
 	//http.HandleFunc("/save/", saveHandler)
 	log.Fatal(http.ListenAndServe(":8080", nil))
+	fs := http.FileServer(http.Dir("pink_slips"))
+	http.Handle("/", fs)
+
+	log.Println("Listening...")
+	http.ListenAndServe(":3000", nil)
 }
 
 func process(w http.ResponseWriter, r *http.Request) {
@@ -35,13 +41,12 @@ func process(w http.ResponseWriter, r *http.Request) {
 	t := sbmt_data.prof_name + sbmt_data.st_name + time.Now().String() // this for testing and will be needed later
 	t2 := md5.New()
 	t2.Write([]byte(t))
-	title := string(t2.Sum(nil))// makes password for teacher and makes title for related files
-	st_data := &Page{string(title), []byte(sbmt_data.prof_name + "\n" + sbmt_data.prof_addr + "\n" + sbmt_data.st_name + "\n" + sbmt_data.st_addr + "\n" + sbmt_data.skp_class + sbmt_data.class_block+ "\n" + sbmt_data.evt_date + "\n" + sbmt_data.out_time)} // page being prepped for saving here is what the student has submitted and the teacher will be seeing
+	title := fmt.Sprintf("%x", t2.Sum(nil))// makes password for teacher and makes title for related files
+	st_data := &Page{title, []byte(sbmt_data.prof_name + "\n" + sbmt_data.prof_addr + "\n" + sbmt_data.st_name + "\n" + sbmt_data.st_addr + "\n" + sbmt_data.skp_class + "\n" + sbmt_data.class_block+ "\n" + sbmt_data.evt_date + "\n" + sbmt_data.out_time)} // page being prepped for saving here is what the student has submitted and the teacher will be seeing
 	st_data.save() // this save
-	//teacher_p2, _ := loadPage(teacher_p.Title)
+
 	//reset(teacher_p.Title) // deletes the relevant files eventually should be put  in if statement or another  function ||| defer forces reset() to happen the end of the program
-	log.Print( title, st_data.Body)
-	//fmt.Print(sbmt_data.st_name, sbmt_data.evt_date)
+	log.Print( title, "\n", string(st_data.Body))
 	fmt.Fprintf(w, "You have successfully submitted your request!")
 }
 
@@ -56,8 +61,9 @@ type Page struct { // more or less constructor for pages in general?
 }
 
 func (p *Page) save() error { //no input but creates a file idk i coppied lol
-	filename := p.Title + ".txt"                    //info stored in txt
-	return ioutil.WriteFile("/data/"+filename, p.Body, 0600) // makes the txt file
+	filename := p.Title + ".txt" //info stored in txt
+	path, _ := filepath.Abs("/pink_slips/data")
+	return ioutil.WriteFile(filepath.Join(path, filename), p.Body, 0755) // makes the txt file
 }
 
 func loadPage(title string) (*Page, error) {

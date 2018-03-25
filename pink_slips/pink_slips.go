@@ -16,23 +16,18 @@ import (
 //https://golang.org/doc/articles/wiki/#tmp_6
 func main() {
 	//us := "pink.slips@lwhs.org"
-	fmt.Print("\n--SUCCESS--\n")
-	// keep --SUCCESS-- AT THE END
 	server := http.Server{ // makes server
 		Addr: ":8080",
 	}
 	http.HandleFunc("/data", process) // handles student data
 	server.ListenAndServe() // does the server thing idk
+	fmt.Print("\n--SUCCESS--\n")
+	// keep --SUCCESS-- AT THE END
 
 	http.HandleFunc("/view/", viewHandler)
 	http.HandleFunc("/edit/", editHandler)
 	//http.HandleFunc("/save/", saveHandler)
 	log.Fatal(http.ListenAndServe(":8080", nil))
-	fs := http.FileServer(http.Dir("pink_slips"))
-	http.Handle("/", fs)
-
-	log.Println("Listening...")
-	http.ListenAndServe(":3000", nil)
 }
 
 func process(w http.ResponseWriter, r *http.Request) {
@@ -43,7 +38,7 @@ func process(w http.ResponseWriter, r *http.Request) {
 	t2.Write([]byte(t))
 	title := fmt.Sprintf("%x", t2.Sum(nil))// makes password for teacher and makes title for related files
 	st_data := &Page{title, []byte(sbmt_data.prof_name + "\n" + sbmt_data.prof_addr + "\n" + sbmt_data.st_name + "\n" + sbmt_data.st_addr + "\n" + sbmt_data.skp_class + "\n" + sbmt_data.class_block+ "\n" + sbmt_data.evt_date + "\n" + sbmt_data.out_time)} // page being prepped for saving here is what the student has submitted and the teacher will be seeing
-	st_data.save() // this save
+	st_data.save() // this saves the data submitted to a txt and will make a n HTML file too
 
 	//reset(teacher_p.Title) // deletes the relevant files eventually should be put  in if statement or another  function ||| defer forces reset() to happen the end of the program
 	log.Print( title, "\n", string(st_data.Body))
@@ -60,10 +55,14 @@ type Page struct { // more or less constructor for pages in general?
 	Body  []byte
 }
 
-func (p *Page) save() error { //no input but creates a file idk i coppied lol
-	filename := p.Title + ".txt" //info stored in txt
-	path, _ := filepath.Abs("/pink_slips/data")
-	return ioutil.WriteFile(filepath.Join(path, filename), p.Body, 0755) // makes the txt file
+func (p *Page) save() (error, error) { //no input but creates a file idk i coppied lol
+	file_txt := p.Title + ".txt" //info stored in txt
+	file_html := p.Title +".html"
+
+	html_content := []byte("<!DOCTYPE html><html><head><meta charset=\"utf-8\"><title>"+p.Title+"</title></head><body><p>"+string(p.Body)+"</p><form action=\"http://192.168.1.19:8081/prof?rsp=&id=&thread=666\" method=\"post\" enctype=\"application/x-www-form-urlencoded\"><input type=\"radio\" name=\"rsp\" value=\"yes\" /><br><input type=\"radio\" name=\"rsp\" value=\"no\" /><br><table><tr><td>Computer Generated signature: </td><td><input type = \"password\" name = \"name\" required/></td></tr></table></form></body></html>") //file byte
+
+	path, _ := filepath.Abs("pink_slips/data") // set path
+	return ioutil.WriteFile(filepath.Join(path, file_txt), p.Body, 0755), ioutil.WriteFile(filepath.Join(path,file_html), html_content, 0755)
 }
 
 func loadPage(title string) (*Page, error) {

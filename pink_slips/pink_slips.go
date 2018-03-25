@@ -15,13 +15,6 @@ import (
 //https://golang.org/doc/articles/wiki/#tmp_6
 func main() {
 	//us := "pink.slips@lwhs.org"
-	//st_data :=  // student_data{us, "some_teacher@lwhs.org", "sporty.student@gmail.com", "3/14/18", "12:40", "COMPUTING 2", "teacher+student+time.now"}
-	//title := "ok_test" // this for testing and will be needed later
-	//teacher_p := &Page{title, []byte(title)} // page being prepped for saving here is what the student has submitted and the teacher will be seeing
-	//teacher_p.save() // this saves
-	//teacher_p2, _ := loadPage(teacher_p.Title)
-	//reset(teacher_p.Title) // deletes the relevant files eventually should be put  in if statement or another  function ||| defer forces reset() to happen the end of the program
-	//fmt.Print(string(teacher_p2.Body))
 	fmt.Print("\n--SUCCESS--\n")
 	// keep --SUCCESS-- AT THE END
 	server := http.Server{ // makes server
@@ -42,12 +35,12 @@ func process(w http.ResponseWriter, r *http.Request) {
 	t := sbmt_data.prof_name + sbmt_data.st_name + time.Now().String() // this for testing and will be needed later
 	t2 := md5.New()
 	t2.Write([]byte(t))
-	title := t2.Sum(nil)// makes password for teacher and makes title for related files
+	title := string(t2.Sum(nil))// makes password for teacher and makes title for related files
 	st_data := &Page{string(title), []byte(sbmt_data.prof_name + "\n" + sbmt_data.prof_addr + "\n" + sbmt_data.st_name + "\n" + sbmt_data.st_addr + "\n" + sbmt_data.skp_class + sbmt_data.class_block+ "\n" + sbmt_data.evt_date + "\n" + sbmt_data.out_time)} // page being prepped for saving here is what the student has submitted and the teacher will be seeing
 	st_data.save() // this save
 	//teacher_p2, _ := loadPage(teacher_p.Title)
 	//reset(teacher_p.Title) // deletes the relevant files eventually should be put  in if statement or another  function ||| defer forces reset() to happen the end of the program
-	log.Printf("\n %x\n %s", title, st_data.Body)
+	log.Print( title, st_data.Body)
 	//fmt.Print(sbmt_data.st_name, sbmt_data.evt_date)
 	fmt.Fprintf(w, "You have successfully submitted your request!")
 }

@@ -40,6 +40,8 @@ func process(w http.ResponseWriter, r *http.Request) {
 	title := fmt.Sprintf("%x", t2.Sum(nil))// makes password for teacher and makes title for related files
 	st_data := &Page{title, []byte(sbmt_data.prof_name + "\n" + sbmt_data.prof_addr + "\n" + sbmt_data.st_name + "\n" + sbmt_data.st_addr + "\n" + sbmt_data.skp_class + "\n" + sbmt_data.class_block+ "\n" + sbmt_data.evt_date + "\n" + sbmt_data.out_time)} // page being prepped for saving here is what the student has submitted and the teacher will be seeing
 	st_data.save() // this saves the data submitted to a txt and will make a n HTML file too
+	
+	// WE NEED TO SEND THIS DATA TO THE STUDENT AND THE TEACHER  (FOR THE STUDENT IT IS A CONFIRMATION)
 
 	//reset(teacher_p.Title) // deletes the relevant files eventually should be put  in if statement or another  function ||| defer forces reset() to happen the end of the program
 	log.Print( title, "\n", string(st_data.Body))

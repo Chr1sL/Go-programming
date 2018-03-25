@@ -10,6 +10,7 @@ import (
 	"log"
 	"crypto/md5"
 	"path/filepath"
+	"strings"
 )
 
 // I'm somewhat following the tutorial from the  link in the readme
@@ -58,11 +59,11 @@ type Page struct { // more or less constructor for pages in general?
 func (p *Page) save() (error, error) { //no input but creates a file idk i coppied lol
 	file_txt := p.Title + ".txt" //info stored in txt
 	file_html := p.Title +".html"
-
-	html_content := []byte("<!DOCTYPE html><html><head><meta charset=\"utf-8\"><title>"+p.Title+"</title></head><body><p>"+string(p.Body)+"</p><form action=\"http://192.168.1.19:8081/prof?rsp=&id=&thread=666\" method=\"post\" enctype=\"application/x-www-form-urlencoded\"><input type=\"radio\" name=\"rsp\" value=\"yes\" /><br><input type=\"radio\" name=\"rsp\" value=\"no\" /><br><table><tr><td>Computer Generated signature: </td><td><input type = \"password\" name = \"name\" required/></td></tr></table></form></body></html>") //file byte
+	body := strings.Replace(string(p.Body), "\n", "</p><p>", -1)
+	html_content := []byte("<!DOCTYPE html><html><head><meta charset=\"utf-8\"><title>"+p.Title+"</title></head><body><p>"+body+"</p><form action=\"http://192.168.1.19:8081/prof?rsp=&id=&thread=666\" method=\"post\" enctype=\"application/x-www-form-urlencoded\"><input type=\"radio\" name=\"rsp\" value=\"yes\" /><br><input type=\"radio\" name=\"rsp\" value=\"no\" /><br><table><tr><td>Computer Generated signature: </td><td><input type = \"password\" name = \"name\" required/></td></tr></table></form></body></html>") //file byte
 
 	path, _ := filepath.Abs("pink_slips/data") // set path
-	return ioutil.WriteFile(filepath.Join(path, file_txt), p.Body, 0755), ioutil.WriteFile(filepath.Join(path,file_html), html_content, 0755)
+	return ioutil.WriteFile(filepath.Join(path, file_txt), p.Body, 0755), ioutil.WriteFile(filepath.Join(path,file_html), html_content, 0755)//writes both the record txt and the html file
 }
 
 func loadPage(title string) (*Page, error) {

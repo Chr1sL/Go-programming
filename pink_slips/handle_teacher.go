@@ -22,7 +22,7 @@ func process_rsp(w http.ResponseWriter, r *http.Request)  {
 	prof_rsp.log_rsp()
 	defer prof_rsp.prune() // forces the pruning/ deletion of irrelavent files to happen last so it doesnt happen too soon
 	// EMAIL STUDENT WITH RESPONSE OF THE TEACHER (YES/ NO)
-	fmt.Fprintf(w, "Thank you for your response it has been recorded and sent to your student!")
+	fmt.Fprintf(w, "Thank you for your response it has been recorded and your student  will be notified shortly!")
 }
 
 type rsp struct {
@@ -32,7 +32,11 @@ type rsp struct {
 func (r *rsp)log_rsp() {
 	file_txt := r.auth_id + ".txt"
 	path, _ := filepath.Abs("pink_slips/data")
-	data, _ := ioutil.ReadFile(filepath.Join(path, file_txt))
+	data, err := ioutil.ReadFile(filepath.Join(path, file_txt))
+	if err != nil {
+		panic(err)
+			fmt.Fprint(nil, "Oh no! this key is incorrect! Please try again.")
+	}
 	new_data := string(data) + "\n" + r.reply + "\n" + r.auth_id
 	log_file, _ := os.OpenFile(filepath.Join(path, "log.txt"), os.O_APPEND|os.O_WRONLY, 0600)
 

@@ -12,12 +12,10 @@ import (
 	"net/smtp"
 	_ "bytes"
 	"crypto/tls"
+	"golang.org/x/tools/go/gcimporter15/testdata"
 )
 
-// I'm somewhat following the tutorial from the  link in the readme
-//https://golang.org/doc/articles/wiki/#tmp_6
 func main() {
-	//us := "pink.slips@lwhs.org"
 	server := http.Server{ // makes server
 		Addr: ":8080",
 	}
@@ -37,8 +35,6 @@ func process(w http.ResponseWriter, r *http.Request) {
 	st_data.save() // this saves the data submitted to a txt and will make a n HTML file too
 	
 	defer sbmt_data.send_mail() // should send the email, if it works i will add it to the other file.
-
-	//reset(teacher_p.Title) // deletes the relevant files eventually should be put  in if statement or another  function ||| defer forces reset() to happen the end of the program
 	log.Print( title, "\n", string(st_data.Body))
 	fmt.Fprintf(w, "You have successfully submitted your request!")
 }

@@ -26,16 +26,23 @@ func main() {
 func process(w http.ResponseWriter, r *http.Request) {
 	sbmt_data := evt_data{r.FormValue("t_name"),r.FormValue("name"), r.FormValue("t_email"), r.FormValue("s_email"), r.FormValue("date"), r.FormValue("class"), r.FormValue("block"), r.FormValue("time")}
 
-	t := sbmt_data.prof_name + sbmt_data.st_name + time.Now().String() // this for testing and will be needed later
-	t2 := md5.New()
-	t2.Write([]byte(t))
-	title := fmt.Sprintf("%x", t2.Sum(nil))// makes password for teacher and makes title for related files
-	st_data := &Page{title, []byte(sbmt_data.prof_name + "\n" + sbmt_data.prof_addr + "\n" + sbmt_data.st_name + "\n" + sbmt_data.st_addr + "\n" + sbmt_data.skp_class + "\n" + sbmt_data.class_block+ "\n" + sbmt_data.evt_date + "\n" + sbmt_data.out_time)} // page being prepped for saving here is what the student has submitted and the teacher will be seeing
-	st_data.save() // this saves the data submitted to a txt and will make a n HTML file too
-	
-	defer sbmt_data.send_mail() // should send the email, if it works i will add it to the other file.
-	log.Print( title, "\n", string(st_data.Body))
-	fmt.Fprintf(w, "You have successfully submitted your request!")
+		if strings.HasSuffix(sbmt_data.prof_addr, "@lwhs.org") == true { // prevents students from sending email to self
+			t := sbmt_data.prof_name + sbmt_data.st_name + time.Now().String() // this for testing and will be needed later
+			t2 := md5.New()
+			t2.Write([]byte(t))
+			title := fmt.Sprintf("%x", t2.Sum(nil))// makes password for teacher and makes title for related files
+			st_data := &Page{title, []byte(sbmt_data.prof_name + "\n" + sbmt_data.prof_addr + "\n" + sbmt_data.st_name + "\n" + sbmt_data.st_addr + "\n" + sbmt_data.skp_class + "\n" + sbmt_data.class_block+ "\n" + sbmt_data.evt_date + "\n" + sbmt_data.out_time)} // page being prepped for saving here is what the student has submitted and the teacher will be seeing
+			st_data.save() // this saves the data submitted to a txt and will make a n HTML file too
+
+			defer sbmt_data.send_mail("Hello " + sbmt_data.prof_name +", \n \n I have a sports competition on " + sbmt_data.evt_date + " and was hoping it would be ok if I missed class/ left early that day (I leave at "+ sbmt_data.out_time + "). Of course I will make up any course material that I missed in class. \n \n Best wishes, \n \t"+ sbmt_data.st_name + "\n \n http://192.168.1.22:3000/data/", title+".html")
+			defer sbmt_data.send_mail(strings.Join([]string{"Hello, \n \n Here is your anticipated absence receipt:", sbmt_data.st_name, sbmt_data.class_block, sbmt_data.skp_class, sbmt_data.evt_date}, "\n"), "")
+
+			log.Print( title, "\n", string(st_data.Body))
+			fmt.Fprint(w, "You have successfully submitted your request!")
+			} else {
+				fmt.Fprint(w, "Oh no! The teacher email address you submitted was not recognized! Please go back and try again.")
+		}
+
 }
 
 type evt_data struct {
@@ -52,19 +59,18 @@ func (p *Page) save() (error, error) { //no input but creates a file idk i coppi
 	file_txt := p.Title + ".txt" //info stored in txt
 	file_html := p.Title +".html"
 	body := strings.Replace(string(p.Body), "\n", "</p><p>", -1) // "http://[your ip addr]/prof?r
-	html_content := []byte("<!DOCTYPE html><html><head><meta charset=\"utf-8\"><title>"+p.Title+"</title></head><body><p>"+body+"</p><form action=\"http://10.1.9.125:8081/prof?rsp=&id=&thread=666\" method=\"post\" enctype=\"application/x-www-form-urlencoded\"><input type=\"radio\" name=\"rsp\" value=\"yes\" required/>yes<br><input type=\"radio\" name=\"rsp\" value=\"no\" required/>no<br><table><tr><td>Computer Generated signature: </td><td><input type = \"text\" name = \"id\" required/></td></tr></table><input type=\"submit\" value=\"submit\" /></form></body></html>") //file byte
+	html_content := []byte("<!DOCTYPE html><html><head><meta charset=\"utf-8\"><title>"+p.Title+"</title></head><body><p>"+body+"</p><form action=\"http://192.168.1.22:8081/prof?rsp=&id=&thread=666\" method=\"post\" enctype=\"application/x-www-form-urlencoded\"><input type=\"radio\" name=\"rsp\" value=\"yes\" required/>yes<br><input type=\"radio\" name=\"rsp\" value=\"no\" required/>no<br><table><tr><td>Computer Generated signature: </td><td><input type = \"text\" name = \"id\" required/></td></tr></table><input type=\"submit\" value=\"submit\" /></form></body></html>") //file byte
 
 	path, _ := filepath.Abs("pink_slips/data") // set path
 	return ioutil.WriteFile(filepath.Join(path, file_txt), p.Body, 0755), ioutil.WriteFile(filepath.Join(path,file_html), html_content, 0755)//writes both the record txt and the html file
 }
 // blue print for the code bellow came from https://hackernoon.com/golang-sendmail-sending-mail-through-net-smtp-package-5cadbe2670e0
-func (e *evt_data) send_mail() {
+func (e *evt_data) send_mail(body, file_addr string) {
 	mail := Mail{}
 	mail.senderId = "lwhs.pinkslips@gmail.com"
 	mail.toIds = []string{e.st_addr, e.prof_addr}
 	mail.subject = "Request to miss class on " + e.evt_date
-	mail.body = "Hello " + e.prof_name +", \n \n I have a sports competition on " + e.evt_date + " and was hoping it would be ok if I missed class/ left early that day (I leave at "+ e.out_time + "). Of course I will make up any course material that I missed in class. \n \n Best wishes, \n \t"+ e.st_name
-	
+	mail.body = body + file_addr
 	messageBody := mail.BuildMessage()
 	
 	smtpServer := SmtpServer{host: "smtp.gmail.com", port: "465"}

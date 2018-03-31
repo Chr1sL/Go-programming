@@ -12,7 +12,6 @@ import (
 	"net/smtp"
 	_ "bytes"
 	"crypto/tls"
-	"golang.org/x/tools/go/gcimporter15/testdata"
 )
 
 func main() {
@@ -53,7 +52,7 @@ func (p *Page) save() (error, error) { //no input but creates a file idk i coppi
 	file_txt := p.Title + ".txt" //info stored in txt
 	file_html := p.Title +".html"
 	body := strings.Replace(string(p.Body), "\n", "</p><p>", -1) // "http://[your ip addr]/prof?r
-	html_content := []byte("<!DOCTYPE html><html><head><meta charset=\"utf-8\"><title>"+p.Title+"</title></head><body><p>"+body+"</p><form action=\"http://192.168.1.8:8081/prof?rsp=&id=&thread=666\" method=\"post\" enctype=\"application/x-www-form-urlencoded\"><input type=\"radio\" name=\"rsp\" value=\"yes\" required/>yes<br><input type=\"radio\" name=\"rsp\" value=\"no\" required/>no<br><table><tr><td>Computer Generated signature: </td><td><input type = \"text\" name = \"name\" required/></td></tr></table><input type=\"submit\" value=\"submit\" /></form></body></html>") //file byte
+	html_content := []byte("<!DOCTYPE html><html><head><meta charset=\"utf-8\"><title>"+p.Title+"</title></head><body><p>"+body+"</p><form action=\"http://10.1.9.125:8081/prof?rsp=&id=&thread=666\" method=\"post\" enctype=\"application/x-www-form-urlencoded\"><input type=\"radio\" name=\"rsp\" value=\"yes\" required/>yes<br><input type=\"radio\" name=\"rsp\" value=\"no\" required/>no<br><table><tr><td>Computer Generated signature: </td><td><input type = \"text\" name = \"id\" required/></td></tr></table><input type=\"submit\" value=\"submit\" /></form></body></html>") //file byte
 
 	path, _ := filepath.Abs("pink_slips/data") // set path
 	return ioutil.WriteFile(filepath.Join(path, file_txt), p.Body, 0755), ioutil.WriteFile(filepath.Join(path,file_html), html_content, 0755)//writes both the record txt and the html file

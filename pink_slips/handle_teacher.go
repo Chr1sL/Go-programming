@@ -25,6 +25,7 @@ func process_rsp(w http.ResponseWriter, r *http.Request)  {
 	prof_rsp := rsp{r.FormValue("rsp"), r.FormValue("id")}
 	f_data_arr := prof_rsp.log_rsp()
 	defer prof_rsp.prune() // forces the pruning/ deletion of irrelavent files to happen last so it doesnt happen too soon
+	prof_rsp.log_rsp()
 	final_data := all_data{f_data_arr[0], f_data_arr[1], f_data_arr[2], f_data_arr[3], f_data_arr[4], f_data_arr[5], f_data_arr[6], f_data_arr[7], f_data_arr[8]} // the final set of data  with the teacher's response
 	final_data.send_mail()
 	
@@ -42,17 +43,18 @@ type all_data struct {
 func (r *rsp)log_rsp() []string {
 	file_txt := r.auth_id + ".txt"
 	path, _ := filepath.Abs("pink_slips/data")
-	data, err := ioutil.ReadFile(filepath.Join(path, file_txt))
-	if err != nil {
-		panic(err)
-			fmt.Fprint(nil, "Oh no! this key is incorrect! Please try again.")
-	}
+	data, _ := ioutil.ReadFile(filepath.Join(path, file_txt))
+	//if err != nil {
+	//	panic(err)
+	//		fmt.Fprint(nil, "Oh no! this key is incorrect! Please try again.")
+	//}
 	new_data := string(data) + "\n" + r.reply + "\n" + r.auth_id
 	log_file, _ := os.OpenFile(filepath.Join(path, "log.txt"), os.O_APPEND|os.O_WRONLY, 0600)
 
 	defer log_file.Close()
 	log_file.WriteString(new_data)
-	return strings.Split(new_data, string('\n'))
+	//return strings.Split(new_data, "\n")
+	return strings.Split(new_data, "\n")
 }
 
 func (r *rsp) prune() (error, error) {

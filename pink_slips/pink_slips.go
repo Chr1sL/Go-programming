@@ -1,5 +1,5 @@
 package main
-// this helped a lot (link)
+
 import (
 	"fmt"
 	"io/ioutil"
@@ -48,7 +48,6 @@ func process(w http.ResponseWriter, r *http.Request) {
 type evt_data struct {
 	prof_name, st_name, prof_addr, st_addr, evt_date, skp_class, class_block, out_time string
 }
-
 
 type Page struct { // more or less constructor for pages in general?
 	Title string
@@ -131,7 +130,6 @@ func (e *evt_data) send_mail(body, file_addr string) {
 	
 	log.Println("Mail sent successfully")
 }
-
 
 type SmtpServer struct {
 	host string

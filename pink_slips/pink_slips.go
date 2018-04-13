@@ -69,7 +69,12 @@ func (e *evt_data) send_mail(body, file_addr string) {
 	mail.senderId = "lwhs.pinkslips@gmail.com"
 	mail.toIds = []string{e.st_addr, e.prof_addr}
 	mail.subject = "Request to miss class on " + e.evt_date
+<<<<<<< Updated upstream
 	mail.body = body + file_addr
+=======
+	mail.body = "Hello " + e.prof_name +", \n \n"+ e.st_name+" has a sports competition on " + e.evt_date + " and was hoping it would be ok if they missed class/ left early that day (planning to leave at "+ e.out_time + "). Of course they will make up any course material that they missed in class. \n \n Best wishes, \n \t"+ e.st_name
+	
+>>>>>>> Stashed changes
 	messageBody := mail.BuildMessage()
 	
 	smtpServer := SmtpServer{host: "smtp.gmail.com", port: "465"}
